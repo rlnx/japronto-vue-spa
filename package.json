@@ -1,0 +1,15 @@
+{
+  "name": "japronto-web-app-example",
+  "version": "0.1.0",
+  "description": "Japronto based web application example",
+  "scripts": {
+    "make-coffee": "watchify -v -t coffeeify client/app.coffee -o assets/js/app.js",
+    "start": "python3 server/app.py --dev"
+  },
+  "author": "Ruslan Israfilov",
+  "license": "MIT",
+  "devDependencies": {
+    "coffeeify": "^2.0.1",
+    "watchify": "^3.7.0"
+  }
+}
