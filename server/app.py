@@ -12,6 +12,10 @@ def route(url):
 
 @route('/')
 def index(request):
-    return request.Response(text=file_cache.app_container, mime_type='text/html')
+    return file_cache.html(request, 'build/app.html')
+
+@route('/app.bin')
+def assets_js(request):
+    return file_cache.js(request, 'build/app.js')
 
 app.run(debug=cfg.debug, host=cfg.host, port=cfg.port)

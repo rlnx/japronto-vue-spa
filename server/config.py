@@ -2,7 +2,7 @@
 class Config(object):
     def __init__(self):
         self._config = {
-            'app_container': 'static/app-container.html',
+            'static_dir': 'static',
             'host': 'localhost',
             'port': 5432,
             'debug': True
