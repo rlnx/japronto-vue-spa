@@ -13,6 +13,10 @@ module.exports = {
       inject: false,
       template: './client/container.pug',
       filename: 'app.html'
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      _: 'underscore'
     })
   ],
   resolve: {

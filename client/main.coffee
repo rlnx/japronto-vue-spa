@@ -20,8 +20,10 @@ vRouter = new VueRouter { routes }
 
 sync vStore, vRouter
 
-new Vue
+app = new Vue
   el:     '#app'
   router: vRouter
   store:  vStore
   render: (h) => h(App)
+
+app.$store.dispatch 'listSuites'

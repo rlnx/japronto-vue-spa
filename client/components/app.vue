@@ -1,7 +1,7 @@
 <template lang="pug">
-  v-app(top-toolbar left-fixed-sidebar)
+  v-app(top-fixed-toolbar left-fixed-sidebar)
     header
-      v-toolbar
+      v-toolbar(fixed)
         v-toolbar-side-icon(@click.native.stop="openSidebar" class="hidden-lg-and-up px-2")
         v-toolbar-title Test runner
     main
@@ -12,8 +12,9 @@
             v-list-tile-avatar
               v-icon {{item.icon}}
             v-list-tile-content {{ item.title }}
-      v-content(class="pt-0")
-        router-view
+      v-content
+        v-container(fluid class="pa-3")
+          router-view
 </template>
 
 <style lang="stylus">
