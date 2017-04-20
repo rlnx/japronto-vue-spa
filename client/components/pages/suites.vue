@@ -36,6 +36,7 @@
               v-text-field(
                 label="Command"
                 v-bind:value="suite.command"
+                v-bind:disabled="suite.modifying"
                 @keyup.native.enter="editSuiteCommand(suite, $event)"
               )
 </template>
@@ -45,7 +46,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed:
-    mapGetters { suites: 'getSuites' }
+    mapGetters { suites: 'suites' }
 
   data: ->
     newTestSuiteName: null

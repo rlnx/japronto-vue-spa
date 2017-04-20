@@ -13,10 +13,10 @@ import vStore     from './store/store.coffee'
 
 routes = [
   { path: '/',       component: HomePage   }
-  { path: '/home',   component: HomePage   }
-  { path: '/suites', component: SuitesPage }
+  { name: 'home', path: '/home',   component: HomePage   }
+  { name: 'suites', path: '/suites', component: SuitesPage }
 ]
-vRouter = new VueRouter { routes }
+vRouter = new VueRouter { history: false, routes }
 
 sync vStore, vRouter
 

@@ -1,5 +1,6 @@
-getters =
-  getSuites: (state) ->
-    state.suites
+class Getters
+  runs: (state) => state.runs
+  suites: (state) => state.suites
+  selectedSuite: (state) => state.selectedSuite
 
-export default getters
+export default new Getters

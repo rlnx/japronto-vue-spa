@@ -8,7 +8,8 @@ class Mutations
     for suite in suites
       if suite?.id? and suite?.name and suite?.command
         state.suites.push @prepareNewSuite(suite)
-
+    if state.suites.length > 0 and not state.selectedSuite
+      state.selectedSuite = state.suites[0]
 
   startSettingSuites: (state) =>
     state.suitesLoading = true

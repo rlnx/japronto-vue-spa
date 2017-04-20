@@ -1,20 +1,19 @@
 <template lang="pug">
-  v-app(top-fixed-toolbar left-fixed-sidebar)
+  v-app(top-fixed-toolbar)
     header
       v-toolbar(fixed)
-        v-toolbar-side-icon(@click.native.stop="openSidebar" class="hidden-lg-and-up px-2")
         v-toolbar-title Test runner
     main
-      v-sidebar(fixed class="white--text" v-model="sidebar")
-        v-list(dense)
-          v-subheader(inset) Folders
-          v-list-tile(v-for="(item, i) in items", :to="item.href" avatar key="i")
-            v-list-tile-avatar
-              v-icon {{item.icon}}
-            v-list-tile-content {{ item.title }}
       v-content
         v-container(fluid class="pa-3")
           router-view
+    v-bottom-nav(fixed shift value="true")
+      v-btn(flat dark @click.native="navigate('home')" v-bind:value="routerName === 'home'")
+        span Home
+        v-icon ondemand_video
+      v-btn(flat dark @click.native="navigate('suites')" v-bind:value="routerName === 'suites'")
+        span Suites
+        v-icon music_note
 </template>
 
 <style lang="stylus">
@@ -22,17 +21,10 @@
 </style>
 
 <script lang="coffee">
-export default data: ->
-  sidebar: false
-  items: [
-    href: '#home'
-    title: 'Home'
-    icon: 'home'
-  ,
-    href: '#suites'
-    title: 'Suites'
-    icon: 'extension'
-  ]
-  openSidebar: ->
-    this.sidebar = !this.sidebar
+export default {
+  computed:
+    routerName: () -> this.$store.state.route.name
+  methods:
+    navigate: (path) -> this.$router.push { path }
+}
 </script>
