@@ -10,10 +10,10 @@
           item-text="name"
           item-value="name"
           v-bind:items="suites"
-          v-model="selectedSuite")
+          v-model="$store.state.selectedSuite")
         v-btn(
-          primary
-          class="ml-4"
+          primary class="ml-4"
+          @click.native="runSuite"
           v-bind:disabled="$store.state.runsLoading || $store.state.suitesLoading") Run
 
     div(class="pt-3")
@@ -52,14 +52,15 @@ headers = [
   { text: 'Status', value: 'status' }
 ]
 
-getters = mapGetters
-  runs: 'runs'
-  suites: 'suites'
-  selectedSuite: 'selectedSuite'
-
 export default {
-  computed: getters
-  data: () =>
+  computed: mapGetters { 'runs', 'suites' }
+  data: () ->
     headers: headers
+
+  methods:
+    runSuite: ->
+      selectedSuite = this.$store.state.selectedSuite
+      this.$store.dispatch 'runSuite', selectedSuite
+
 }
 </script>

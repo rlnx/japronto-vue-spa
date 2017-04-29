@@ -28,3 +28,6 @@ app = new Vue
 
 app.$store.dispatch 'listSuites'
 app.$store.dispatch 'listRuns'
+
+listRuns = () => app.$store.dispatch 'listRunsInBackground'
+setInterval listRuns, 5000

@@ -14,8 +14,9 @@ class Actions
       onSuccess: (suites) => commit 'setSuites', { suites }
       onError: ({ message }) => commit 'listSuitesError', { message }
 
-  listRunsInternal: (commit) =>
-    commit 'startSettingRuns'
+  listRunsInternal: (commit, disableIndicator) =>
+    unless disableIndicator
+      commit 'startSettingRuns'
     api.runs.list
       onSuccess: (runs) => commit 'setRuns', { runs }
       onError: ({ message }) => commit 'listRunsError', { message }
@@ -39,7 +40,14 @@ class Actions
         onSuccess: (r) => commit 'updateSuiteCommand', { suite, command }
         onError: ({ message }) => commit 'updateSuiteError', { suite, message }
 
+  runSuite: ({ commit }, suite) =>
+    api.runs.start suite,
+      onSuccess: (run) => commit 'addRun', { run }
+
   listRuns: ({ commit }) =>
     @listRunsInternal commit
+
+  listRunsInBackground: ({ commit }) =>
+    @listRunsInternal commit, true
 
 export default new Actions

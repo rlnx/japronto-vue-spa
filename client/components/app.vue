@@ -9,11 +9,11 @@
           router-view
     v-bottom-nav(fixed shift value="true")
       v-btn(flat dark @click.native="navigate('home')" v-bind:value="routerName === 'home'")
-        span Home
-        v-icon ondemand_video
+        span Runs
+        v-icon directions_run
       v-btn(flat dark @click.native="navigate('suites')" v-bind:value="routerName === 'suites'")
         span Suites
-        v-icon music_note
+        v-icon list
 </template>
 
 <style lang="stylus">

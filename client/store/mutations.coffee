@@ -55,6 +55,10 @@ class Mutations
     state.runs = runs
     state.runsLoading = false
 
+  addRun: (state, { run }) =>
+    state.runs ||= []
+    state.runs.push run
+
   listRunsError: (state, { message }) =>
     console.log "Fetching list of runs error: #{message}"
     state.runsLoading = false

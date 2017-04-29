@@ -49,7 +49,9 @@ def suite_append(request):
 @route('/runs/start/{id}')
 def suite_append(request):
     suite_id = request.match_dict['id']
-    return request.Response(json={ 'id': 0 })
+    return request.Response(json={
+      'id': 0, 'suiteId': suite_id, 'suiteName': 'Dummy suite',
+      'passRate': '0/10', 'status': 'running' })
 
 
 app.run(debug=cfg.debug, host=cfg.host, port=cfg.port)
