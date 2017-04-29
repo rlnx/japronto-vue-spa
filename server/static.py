@@ -1,5 +1,5 @@
 import os
-from config import cfg
+from config import config
 
 class FileResourceCache(object):
     def __init__(self):
@@ -13,7 +13,7 @@ class FileResourceCache(object):
 
     def load_file(self, resource_name):
         cache = self._cache
-        if not cfg.debug:
+        if not config.debug:
             if resource_name in cache:
                 return cache[resource_name]
         with open(resource_name, 'r') as file:
@@ -29,7 +29,7 @@ class FileResourceCache(object):
             return request.Response(code=404)
 
     def _load_resource(self, url):
-        path_to_resource = os.path.join(cfg.static_dir, url)
+        path_to_resource = os.path.join(config.static_dir, url)
         return self.load_file(path_to_resource)
 
 file_cache = FileResourceCache()

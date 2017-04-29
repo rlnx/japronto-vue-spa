@@ -1,7 +1,11 @@
-from japronto import Application
-from config import cfg
-from static import file_cache
+import factory
+import store
 
+from config import config
+from static import file_cache
+from testrunner import test_runner
+
+from japronto import Application
 app = Application()
 
 def route(url, method='GET'):
@@ -19,11 +23,9 @@ def assets_js(request):
     return file_cache.js(request, 'build/app.js')
 
 @route('/suites/list')
-def suite_append(request):
-    return request.Response(json=[
-        { 'id': 0, 'name': 'Predefined test suite',
-          'command': 'python3 run-my-ugly-script.py' }
-    ])
+async def suite_append(request):
+    all_suites_json = await store.get_all_suites()
+    return request.Response(json=all_suites_json)
 
 @route('/suites/append')
 def suite_append(request):
@@ -36,22 +38,19 @@ def suite_append(request):
     return request.Response(json={ 'status': 'ok' })
 
 @route('/runs/list')
-def suite_append(request):
-    return request.Response(json=[
-        { 'id': 0, 'suiteId': 0,
-          'suiteName': 'Predefined test suite',
-          'passRate': '10/10', 'status': 'finished' },
-        { 'id': 1, 'suiteId': 0,
-          'suiteName': 'Predefined test suite',
-          'passRate': '8/10', 'status': 'failed' }
-    ])
+async def suite_append(request):
+    finished_tests    = test_runner.finished_tests()
+    suite_run_patches = await factory.create_suite_run_patches(finished_tests)
+    await store.update_suite_runs(suite_run_patches)
+    suite_runs_json = await store.get_all_suite_runs_json()
+    return request.Response(json=suite_runs_json)
 
 @route('/runs/start/{id}')
-def suite_append(request):
-    suite_id = request.match_dict['id']
-    return request.Response(json={
-      'id': 0, 'suiteId': suite_id, 'suiteName': 'Dummy suite',
-      'passRate': '0/10', 'status': 'running' })
+async def run_suite(request):
+    suite_id  = int(request.match_dict['id'])
+    suite     = await store.get_suite(suite_id)
+    suite_run = await factory.create_suite_run(suite)
+    await test_runner.schedule_test(suite_run.id, suite.command)
+    return request.Response(json=suite_run.to_json())
 
-
-app.run(debug=cfg.debug, host=cfg.host, port=cfg.port)
+app.run(debug=config.debug, host=config.host, port=config.port)
