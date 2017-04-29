@@ -13,8 +13,7 @@
                 light flat class="btn--light-flat-focused"
                 @click.native="addSuite"
                 v-bind:loading="$store.state.suiteAppending"
-                v-bind:disabled="$store.state.suiteAppending || $store.state.suitesLoading"
-              ) Add suite
+                v-bind:disabled="$store.state.suiteAppending || $store.state.suitesLoading") Add suite
     div(class="pt-3")
     v-container(fluid v-if="$store.state.suitesLoading")
       div(class="pt-5")
@@ -23,8 +22,7 @@
           class="center"
           indeterminate
           v-bind:size="60"
-          class="primary--text"
-        )
+          class="primary--text")
     v-expansion-panel(v-else)
       v-expansion-panel-content(v-for="(suite, i) in suites" v-bind:key="i")
         div(slot="header")
@@ -37,8 +35,7 @@
                 label="Command"
                 v-bind:value="suite.command"
                 v-bind:disabled="suite.modifying"
-                @keyup.native.enter="editSuiteCommand(suite, $event)"
-              )
+                @keyup.native.enter="editSuiteCommand(suite, $event)")
 </template>
 
 <script lang="coffee">

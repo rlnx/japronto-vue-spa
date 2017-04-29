@@ -10,20 +10,14 @@ import mutations from './mutations.coffee'
 state =
   suiteAppending: false
   suitesLoading: false
+  runsLoading: false
   selectedSuite: null
   suites: [ ]
-  runs: [
-    suite:
-      name: 'Example'
-      command: 'python3 run-example.py'
-    timestamp: new Date
-    passRate: '10/10'
-    status: 'finished'
-  ]
+  runs: [ ]
 
 # Format of the state child elements
 # suite = { id, name, command, modifying }
-# run   = { id, suite, passRate, status  }
+# run   = { id, suiteId, suiteName, passRate, status  }
 
 export default new Vuex.Store {
   state

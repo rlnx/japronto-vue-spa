@@ -2,15 +2,23 @@ import api from './../rest/api.coffee'
 
 class Actions
   constructor: ->
-    @listSuitesInternalThrottled = _.throttle(
-      @listSuitesInternal, 500, { trailing: false }
-    )
+    @listSuitesInternalThrottled = @throttle @listSuitesInternal
+    @listRunsInternalThrottled   = @throttle @listRunsInternal
+
+  throttle: (func) ->
+    _.throttle func, 500, { trailing: false }
 
   listSuitesInternal: (commit) =>
     commit 'startSettingSuites'
     api.suites.list
-      onSuccess: (r) => commit 'setSuites', { suites: r }
+      onSuccess: (suites) => commit 'setSuites', { suites }
       onError: ({ message }) => commit 'listSuitesError', { message }
+
+  listRunsInternal: (commit) =>
+    commit 'startSettingRuns'
+    api.runs.list
+      onSuccess: (runs) => commit 'setRuns', { runs }
+      onError: ({ message }) => commit 'listRunsError', { message }
 
   listSuites: ({ commit }) =>
     @listSuitesInternalThrottled commit
@@ -30,5 +38,8 @@ class Actions
       api.suites.update suite, { command },
         onSuccess: (r) => commit 'updateSuiteCommand', { suite, command }
         onError: ({ message }) => commit 'updateSuiteError', { suite, message }
+
+  listRuns: ({ commit }) =>
+    @listRunsInternal commit
 
 export default new Actions

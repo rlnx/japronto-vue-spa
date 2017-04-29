@@ -27,3 +27,4 @@ app = new Vue
   render: (h) => h(App)
 
 app.$store.dispatch 'listSuites'
+app.$store.dispatch 'listRuns'

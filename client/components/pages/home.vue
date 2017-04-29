@@ -11,21 +11,35 @@
           item-value="name"
           v-bind:items="suites"
           v-model="selectedSuite")
-        v-btn(class="ml-4" primary) Run
+        v-btn(
+          primary
+          class="ml-4"
+          v-bind:disabled="$store.state.runsLoading || $store.state.suitesLoading") Run
+
+    div(class="pt-3")
+    v-container(fluid v-if="$store.state.runsLoading")
+      div(class="pt-5")
+      div(class="text-xs-center")
+        v-progress-circular(
+          class="center"
+          indeterminate
+          v-bind:size="60"
+          class="primary--text")
 
     v-data-table(
-      hide-actions
-      class="mt-3 elevation-1"
+      v-else hide-actions
+      class="elevation-1"
       v-bind:headers="headers"
       v-model="runs")
       template(slot="headers" scope="props")
         span {{ props.item.text }}
       template(slot="items" scope="props")
-        td {{ props.item.suite.name }}
+        td {{ props.item.suiteName }}
         td(class="text-xs-right") {{ props.item.passRate }}
         td(class="text-xs-right" v-bind:class="{\
-          'green--text': props.item.status === 'finished',\
-          'orange--text': props.item.status === 'running' \
+          'green--text': props.item.status  === 'finished',\
+          'orange--text': props.item.status === 'running', \
+          'red--text': props.item.status    === 'failed'   \
         }") {{ props.item.status }}
 </template>
 
@@ -33,7 +47,7 @@
 import { mapGetters } from 'vuex'
 
 headers = [
-  { text: 'Test suite name', left: true, value: 'suite.name' }
+  { text: 'Test suite name', left: true, value: 'suiteName' }
   { text: 'Pass rate', value: 'passRate' }
   { text: 'Status', value: 'status' }
 ]

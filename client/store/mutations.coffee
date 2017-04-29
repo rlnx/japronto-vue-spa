@@ -48,4 +48,17 @@ class Mutations
     suite?.modifying = false
 
 
+  startSettingRuns: (state) =>
+    state.runsLoading = true
+
+  setRuns: (state, { runs }) =>
+    state.runs = runs
+    state.runsLoading = false
+
+  listRunsError: (state, { message }) =>
+    console.log "Fetching list of runs error: #{message}"
+    state.runsLoading = false
+    state.runsLoading = false
+
+
 export default new Mutations
