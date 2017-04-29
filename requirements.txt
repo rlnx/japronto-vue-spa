@@ -1,1 +1,2 @@
 japronto >= 0.1.1
+tinydb >= 3.2.0
