@@ -1,73 +1,83 @@
-from tinydb import TinyDB, Query
+import json
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
-_db = TinyDB('test_db.json')
-_suites     = _db.table('suites')
-_suite_runs = _db.table('suite_runs')
+_mongo = MongoClient('mongodb://localhost:27017/')
+_suites     = _mongo.test_runner.suites
+_suite_runs = _mongo.test_runner.suite_runs
 
-class Suite(object):
-    def __init__(self, **kwargs):
-        self.id      = kwargs.get('id')
-        self.name    = kwargs.get('name')
-        self.command = kwargs.get('command')
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        if isinstance(o, StoreObject):
+            return o.source()
+        return json.JSONEncoder.default(self, o)
 
-    def to_json(self):
-        return dict(
-            id      = self.id,
-            name    = self.name,
-            command = self.command
-        )
+class StoreObject(object):
+    def __init__(self, **mongodict):
+        self.__dict__ = mongodict
 
-class SuiteRun(object):
-    def __init__(self, **kwargs):
-        self.id         = kwargs.get('id')
-        self.suite_id   = kwargs.get('suiteId')
-        self.suite_name = kwargs.get('suiteName')
-        self.pass_rate  = kwargs.get('passRate')
-        self.status     = kwargs.get('status')
+    def json(self):
+        return JSONEncoder().encode(self.__dict__)
 
-    def to_json(self):
-        return dict(
-            id        = self.id,
-            suiteId   = self.suite_id,
-            suiteName = self.suite_name,
-            passRate  = self.pass_rate,
-            status    = self.status
-        )
+    def source(self):
+        return self.__dict__
 
-def insert_object(table, obj):
-    obj_json = obj.to_json()
-    obj_json.pop('id', None)
-    obj.id = table.insert(obj_json)
-    return obj
+    def delete_key(self, key):
+        self.__dict__.pop(key, None)
+        return self
 
-def read_object(table, id, Type):
-    obj_json = table.get(eid=id)
-    if obj_json == None:
-        raise Exception('Object with id {} does not exist'.format(id))
-    obj_json['id'] = id
-    return Type(**obj_json)
+    def copy(self):
+        return StoreObject(**( self.__dict__.copy() ))
 
-def make_explicit_ids(objs_json):
-    for obj_json in objs_json:
-        obj_json['id'] = obj_json.eid
-    return objs_json
+    def __str__(self):
+        return str(self.__dict__)
 
+class StoreList(object):
+    def __init__(self, objlist):
+        self._list = self._wrap_objects(objlist)
+
+    def json(self):
+        return JSONEncoder().encode(self._list)
+
+    def source(self):
+        return self._list
+
+    def __getitem__(self, index):
+        return self._list[index]
+
+    def __setitem__(self, idnex, value):
+        self._list[index] = value
+
+    def __iter__(self):
+        return iter(self._list)
+
+    def __str__(self):
+        return str(self._list)
+
+    def _wrap_objects(self, json_list):
+        return [StoreObject(**o) for o in json_list]
 
 async def get_suite(id):
-    return read_object(_suites, id, Suite)
+    return StoreObject( **_suites.find_one({'_id': ObjectId(id) }) )
 
 async def get_all_suites():
-    return make_explicit_ids(_suites.all())
+    return StoreList(_suites.find())
 
-async def get_all_suite_runs_json():
-    return make_explicit_ids(_suite_runs.all())
+async def get_all_suite_runs():
+    return StoreList(_suite_runs.find())
 
-async def insert_suite_run(suite_run):
-    return insert_object(_suite_runs, suite_run)
+async def save_suite_run(suite_run):
+    assert isinstance(suite_run, StoreObject)
+    suite_run._id = _suite_runs.insert_one(suite_run.source()).inserted_id
+    return suite_run
 
 async def update_suite_runs(patches):
     for patch in patches:
-        patch_id   = patch['id']
-        patch_copy = patch.copy()
-        patch_copy.pop('id', None)
-        _suite_runs.update(patch_copy, eids=[ patch_id ])
+        patch_id   = ObjectId(patch._id)
+        patch_copy = patch.copy().delete_key('_id')
+        _suite_runs.update(
+            { '_id': patch_id },
+            { '$set': patch_copy.source() }
+        )

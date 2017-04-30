@@ -6,7 +6,7 @@ class Mutations
   addSuitesInternal: (state, suites) ->
     state.suites ||= []
     for suite in suites
-      if suite?.id? and suite?.name and suite?.command
+      if suite?._id? and suite?.name and suite?.command
         state.suites.push @prepareNewSuite(suite)
     if state.suites.length > 0 and not state.selectedSuite
       state.selectedSuite = state.suites[0]

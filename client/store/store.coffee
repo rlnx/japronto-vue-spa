@@ -16,8 +16,8 @@ state =
   runs: [ ]
 
 # Format of the state child elements
-# suite = { id, name, command, modifying }
-# run   = { id, suiteId, suiteName, passRate, status  }
+# suite = { _id, name, command, modifying }
+# run   = { _id, suiteId, suiteName, passRate, status  }
 
 export default new Vuex.Store {
   state

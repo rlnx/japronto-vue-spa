@@ -24,8 +24,8 @@ def assets_js(request):
 
 @route('/suites/list')
 async def suite_append(request):
-    all_suites_json = await store.get_all_suites()
-    return request.Response(json=all_suites_json)
+    all_suites = await store.get_all_suites()
+    return request.Response(text=all_suites.json(), mime_type='application/json')
 
 @route('/suites/append')
 def suite_append(request):
@@ -33,7 +33,7 @@ def suite_append(request):
 
 @route('/suites/update', method='POST')
 def suite_append(request):
-    suite_id = request.json['id']
+    suite_id = request.json['_id']
     command  = request.json['cmd']
     return request.Response(json={ 'status': 'ok' })
 
@@ -42,15 +42,15 @@ async def suite_append(request):
     finished_tests    = test_runner.finished_tests()
     suite_run_patches = await factory.create_suite_run_patches(finished_tests)
     await store.update_suite_runs(suite_run_patches)
-    suite_runs_json = await store.get_all_suite_runs_json()
-    return request.Response(json=suite_runs_json)
+    suite_runs = await store.get_all_suite_runs()
+    return request.Response(text=suite_runs.json(), mime_type='application/json')
 
 @route('/runs/start/{id}')
 async def run_suite(request):
-    suite_id  = int(request.match_dict['id'])
+    suite_id  = request.match_dict['id']
     suite     = await store.get_suite(suite_id)
     suite_run = await factory.create_suite_run(suite)
-    await test_runner.schedule_test(suite_run.id, suite.command)
-    return request.Response(json=suite_run.to_json())
+    await test_runner.schedule_test(suite_run._id, suite.command)
+    return request.Response(text=suite_run.json(), mime_type='application/json')
 
 app.run(debug=config.debug, host=config.host, port=config.port)

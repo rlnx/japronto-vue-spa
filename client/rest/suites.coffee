@@ -4,8 +4,8 @@ class SuitesApi
       url: '/suites/append'
       data: suite
     request.done (suitId) =>
-      if suitId.id?
-        _.extend suite, { id: suitId.id }
+      if suitId._id?
+        _.extend suite, { _id: suitId._id }
         onSuccess { suite }
       else
         onError 'Server does not return valid id.'
@@ -19,7 +19,7 @@ class SuitesApi
   update: (suite, { command }, { onSuccess, onError }) =>
     request = $.post
       url: "/suites/update"
-      data:  JSON.stringify { id: suite.id, cmd: command }
+      data:  JSON.stringify { _id: suite._id, cmd: command }
       dataType: 'json'
     request.done (status) => onSuccess { }
     request.fail (err) => onError { message: err.responseText }

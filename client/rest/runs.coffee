@@ -5,7 +5,7 @@ class RunsApi
     request.fail (err) => onError { message: err.responseText }
 
   start: (suite, { onSuccess, onError }) =>
-    request = $.get { url: "/runs/start/#{suite.id}" }
+    request = $.get { url: "/runs/start/#{suite._id}" }
     request.done (run) => onSuccess run
     request.fail (err) => onError { message: err.responseText }
 

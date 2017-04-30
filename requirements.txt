@@ -1,2 +1,2 @@
 japronto >= 0.1.1
-tinydb >= 3.2.0
+pymongo >= 3.4.0
