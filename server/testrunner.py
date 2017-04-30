@@ -61,10 +61,8 @@ class Test(object):
         while not process.stdout.at_eof():
             byte_line = await process.stdout.readline()
             line      = byte_line.decode('utf-8')
-            print(line)
             parser.parse(line)
         self._parsed = True
-        print(parser.passed, parser.failed)
         self._status    = self._format_status(parser.passed, parser.failed)
         self._pass_rate = self._format_pass_rate(parser.passed, parser.failed)
 
