@@ -1,8 +1,9 @@
 class SuitesApi
   append: (suite, { onSuccess, onError }) =>
-    request = $.get
+    request = $.post
       url: '/suites/append'
-      data: suite
+      data: JSON.stringify { name: suite.name, command: suite.command }
+      dataType: 'json'
     request.done (suitId) =>
       if suitId._id?
         _.extend suite, { _id: suitId._id }

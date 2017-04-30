@@ -65,6 +65,11 @@ async def get_suite(id):
 async def get_all_suites():
     return StoreList(_suites.find())
 
+async def save_suite(suite):
+    assert isinstance(suite, StoreObject)
+    suite._id = _suites.insert_one(suite.source()).inserted_id
+    return suite
+
 async def get_all_suite_runs():
     return StoreList(_suite_runs.find())
 

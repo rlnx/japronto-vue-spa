@@ -1,5 +1,12 @@
 import store
 
+async def create_suite(name, command):
+    suite = store.StoreObject(
+        name    = name,
+        command = command
+    )
+    return await store.save_suite(suite)
+
 async def create_suite_run(suite):
     suite_run = store.StoreObject(
         suiteId   = suite._id,
@@ -13,7 +20,7 @@ async def create_suite_run_patches(tests):
     patches = []
     for test in tests:
         suite_run_patch = store.StoreObject(
-            _id       = test.id,
+            _id      = test.id,
             status   = await test.status(),
             passRate = await test.pass_rate()
         )

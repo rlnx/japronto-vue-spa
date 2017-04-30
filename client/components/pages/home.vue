@@ -14,7 +14,7 @@
         v-btn(
           primary class="ml-4"
           @click.native="runSuite"
-          v-bind:disabled="$store.state.runsLoading || $store.state.suitesLoading") Run
+          v-bind:disabled="!canRunSuite") Run
 
     div(class="pt-3")
     v-container(fluid v-if="$store.state.runsLoading")
@@ -53,7 +53,7 @@ headers = [
 ]
 
 export default {
-  computed: mapGetters { 'runs', 'suites' }
+  computed: mapGetters { 'runs', 'suites', 'canRunSuite' }
   data: () ->
     headers: headers
 

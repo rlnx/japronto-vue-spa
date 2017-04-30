@@ -14,6 +14,17 @@ def route(url, method='GET'):
         return handler
     return add_handler
 
+def format_json_response(request, data):
+    JOSN_TYPE = 'application/json'
+    if isinstance(data, str):
+        return request.Response(text=data, mime_type=JOSN_TYPE)
+    elif isinstance(data, dict):
+        return request.Response(json=data)
+    elif ( isinstance(data, store.StoreObject) or
+           isinstance(data, store.StoreList) ):
+        return request.Response(text=data.json(), mime_type=JOSN_TYPE)
+    raise Exception('Unknown JSON data format')
+
 @route('/')
 def index(request):
     return file_cache.html(request, 'build/app.html')
@@ -25,11 +36,15 @@ def assets_js(request):
 @route('/suites/list')
 async def suite_append(request):
     all_suites = await store.get_all_suites()
-    return request.Response(text=all_suites.json(), mime_type='application/json')
+    return format_json_response(request, all_suites)
 
-@route('/suites/append')
-def suite_append(request):
-    return request.Response(json={ 'id': 0 })
+@route('/suites/append', method='POST')
+async def suite_append(request):
+    # TODO: Add checks for JSON fields
+    name    = request.json['name']
+    command = request.json['command']
+    suite   = await factory.create_suite(name, command)
+    return format_json_response(request, { '_id': str(suite._id) })
 
 @route('/suites/update', method='POST')
 def suite_append(request):
@@ -43,14 +58,15 @@ async def suite_append(request):
     suite_run_patches = await factory.create_suite_run_patches(finished_tests)
     await store.update_suite_runs(suite_run_patches)
     suite_runs = await store.get_all_suite_runs()
-    return request.Response(text=suite_runs.json(), mime_type='application/json')
+    return format_json_response(request, suite_runs)
 
 @route('/runs/start/{id}')
 async def run_suite(request):
+    # TODO: Add checks for valid identifier
     suite_id  = request.match_dict['id']
     suite     = await store.get_suite(suite_id)
     suite_run = await factory.create_suite_run(suite)
     await test_runner.schedule_test(suite_run._id, suite.command)
-    return request.Response(text=suite_run.json(), mime_type='application/json')
+    return format_json_response(request, suite_run)
 
 app.run(debug=config.debug, host=config.host, port=config.port)
