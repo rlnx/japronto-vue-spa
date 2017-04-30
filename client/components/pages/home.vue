@@ -37,9 +37,9 @@
         td {{ props.item.suiteName }}
         td(class="text-xs-right") {{ props.item.passRate }}
         td(class="text-xs-right" v-bind:class="{\
-          'green--text': props.item.status  === 'successful',\
-          'orange--text': props.item.status === 'running',   \
-          'red--text': props.item.status    === 'failed'     \
+          'green--text': props.item.status  === 'passed',  \
+          'orange--text': props.item.status === 'running', \
+          'red--text': props.item.status    === 'failed'   \
         }") {{ props.item.status }}
 </template>
 

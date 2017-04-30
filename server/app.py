@@ -40,7 +40,7 @@ async def suite_append(request):
 
 @route('/suites/append', method='POST')
 async def suite_append(request):
-    # TODO: Add checks for JSON fields
+    # TODO: Add checks for client JSON fields
     name    = request.json['name']
     command = request.json['command']
     suite   = await factory.create_suite(name, command)
@@ -48,7 +48,7 @@ async def suite_append(request):
 
 @route('/suites/update', method='POST')
 async def suite_append(request):
-    # TODO: Add checks for JSON fields
+    # TODO: Add checks for client JSON fields
     suite_id = request.json['_id']
     command  = request.json['command']
     patch    = factory.create_suite_patch(suite_id, command)

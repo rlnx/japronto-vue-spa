@@ -18,7 +18,7 @@ async def create_suite_run(suite):
     suite_run = store.StoreObject(
         suiteId   = suite._id,
         suiteName = suite.name,
-        status    = 'pending',
+        status    = 'running',
         passRate  = 'N/A'
     )
     return await store.save_suite_run(suite_run)
