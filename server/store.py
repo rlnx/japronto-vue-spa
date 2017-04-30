@@ -59,6 +59,15 @@ class StoreList(object):
     def _wrap_objects(self, json_list):
         return [StoreObject(**o) for o in json_list]
 
+def _apply_patches(collection, patches):
+    for patch in patches:
+        patch_id   = ObjectId(patch._id)
+        patch_copy = patch.copy().delete_key('_id')
+        collection.update(
+            { '_id': patch_id },
+            { '$set': patch_copy.source() }
+        )
+
 async def get_suite(id):
     return StoreObject( **_suites.find_one({'_id': ObjectId(id) }) )
 
@@ -70,6 +79,9 @@ async def save_suite(suite):
     suite._id = _suites.insert_one(suite.source()).inserted_id
     return suite
 
+async def update_suites(patches):
+    _apply_patches(_suites, patches)
+
 async def get_all_suite_runs():
     return StoreList(_suite_runs.find())
 
@@ -79,10 +91,4 @@ async def save_suite_run(suite_run):
     return suite_run
 
 async def update_suite_runs(patches):
-    for patch in patches:
-        patch_id   = ObjectId(patch._id)
-        patch_copy = patch.copy().delete_key('_id')
-        _suite_runs.update(
-            { '_id': patch_id },
-            { '$set': patch_copy.source() }
-        )
+    _apply_patches(_suite_runs, patches)

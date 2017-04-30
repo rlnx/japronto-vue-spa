@@ -20,7 +20,7 @@ class SuitesApi
   update: (suite, { command }, { onSuccess, onError }) =>
     request = $.post
       url: "/suites/update"
-      data:  JSON.stringify { _id: suite._id, cmd: command }
+      data:  JSON.stringify { _id: suite._id, command }
       dataType: 'json'
     request.done (status) => onSuccess { }
     request.fail (err) => onError { message: err.responseText }

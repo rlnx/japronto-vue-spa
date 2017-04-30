@@ -7,6 +7,13 @@ async def create_suite(name, command):
     )
     return await store.save_suite(suite)
 
+def create_suite_patch(id, command):
+    suite_patch = store.StoreObject(
+        _id     = id,
+        command = command
+    )
+    return suite_patch
+
 async def create_suite_run(suite):
     suite_run = store.StoreObject(
         suiteId   = suite._id,
@@ -16,7 +23,7 @@ async def create_suite_run(suite):
     )
     return await store.save_suite_run(suite_run)
 
-async def create_suite_run_patches(tests):
+async def create_suite_run_patches_from_tests(tests):
     patches = []
     for test in tests:
         suite_run_patch = store.StoreObject(

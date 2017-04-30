@@ -47,15 +47,18 @@ async def suite_append(request):
     return format_json_response(request, { '_id': str(suite._id) })
 
 @route('/suites/update', method='POST')
-def suite_append(request):
+async def suite_append(request):
+    # TODO: Add checks for JSON fields
     suite_id = request.json['_id']
-    command  = request.json['cmd']
-    return request.Response(json={ 'status': 'ok' })
+    command  = request.json['command']
+    patch    = factory.create_suite_patch(suite_id, command)
+    await store.update_suites([ patch ])
+    return format_json_response(request, { 'status': 'ok' })
 
 @route('/runs/list')
 async def suite_append(request):
     finished_tests    = test_runner.finished_tests()
-    suite_run_patches = await factory.create_suite_run_patches(finished_tests)
+    suite_run_patches = await factory.create_suite_run_patches_from_tests(finished_tests)
     await store.update_suite_runs(suite_run_patches)
     suite_runs = await store.get_all_suite_runs()
     return format_json_response(request, suite_runs)
