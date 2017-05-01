@@ -1,12 +1,12 @@
-# [Vue.js](vuejs) SPA & [Japronto](japronto) REST server example*
+# [Vue.js][vuejs] SPA & [Japronto][japronto] REST server example*
 SPA &mdash; single page web application <br/>
 REST &mdash; representative state transfer
 
 ## Getting started
 Make sure the following software is installed and is in the PATH.
-* [Node.js](nodejs) and [npm](npm)
+* [Node.js][nodejs] and [npm][npm]
 * Python 3.5 or higher and pip
-* [MongoDB](mongo)
+* [MongoDB][mongo]
 
 Checkout repository and run following commands inside the repo
 root. It will install all necessary front-end and back-end dependencies.
