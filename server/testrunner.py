@@ -1,5 +1,7 @@
 import re
 import asyncio
+import os.path
+from config import config
 
 class TestParser(object):
     regexp_passed = re.compile(r'.*Passed *:? *(?P<num>\d+).*')
@@ -36,9 +38,11 @@ class Test(object):
 
     async def run(self):
         try:
+            fixed_command = self._fix_command(self.command)
             self._process = await asyncio.create_subprocess_shell(
-                self.command, stdout=asyncio.subprocess.PIPE)
+                fixed_command, stdout=asyncio.subprocess.PIPE)
         except Exception as ex:
+            print(ex)
             self._error     = ex
             self._pass_rate = 'N/A'
             self._status    = 'failed'
@@ -61,6 +65,7 @@ class Test(object):
         while not process.stdout.at_eof():
             byte_line = await process.stdout.readline()
             line      = byte_line.decode('utf-8')
+            print(line)
             parser.parse(line)
         self._parsed = True
         self._status    = self._format_status(parser.passed, parser.failed)
@@ -75,6 +80,12 @@ class Test(object):
         if passed is None or failed is None:
             return 'N/A'
         return '{}/{}'.format(passed, passed + failed)
+
+    def _fix_command(self, command):
+        command_chunks = command.split(' ')
+        if config.run_tests_scipt in command_chunks:
+            command_chunks.insert(0, 'cd ' + config.test_dir + ' &&')
+        return ' '.join(command_chunks)
 
 
 class TestRunner(object):
