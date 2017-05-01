@@ -42,7 +42,6 @@ class Test(object):
             self._process = await asyncio.create_subprocess_shell(
                 fixed_command, stdout=asyncio.subprocess.PIPE)
         except Exception as ex:
-            print(ex)
             self._error     = ex
             self._pass_rate = 'N/A'
             self._status    = 'failed'
@@ -65,7 +64,6 @@ class Test(object):
         while not process.stdout.at_eof():
             byte_line = await process.stdout.readline()
             line      = byte_line.decode('utf-8')
-            print(line)
             parser.parse(line)
         self._parsed = True
         self._status    = self._format_status(parser.passed, parser.failed)

@@ -5,7 +5,8 @@
   "scripts": {
     "watch": "cross-env NODE_ENV=development webpack --watch",
     "build": "cross-env NODE_ENV=production  webpack --progress --hide-modules",
-    "dev": "cross-env SERVER_ENV=development python3 server/app.py"
+    "dev":   "cross-env SERVER_ENV=development python3 server/app.py",
+    "start": "cross-env SERVER_ENV=production  python3 server/app.py"
   },
   "dependencies": {
     "vue": "^2.2.6",
