@@ -1,10 +1,29 @@
 import json
+from config import config
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-_mongo = MongoClient('mongodb://localhost:27017/')
-_suites     = _mongo.test_runner.suites
-_suite_runs = _mongo.test_runner.suite_runs
+_var_mongo      = None
+_var_suites     = None
+_var_suite_runs = None
+
+def _mongo():
+    global _var_mongo
+    if not _var_mongo:
+        _var_mongo = MongoClient(config.mongo_connection_string)
+    return _var_mongo
+
+def _suites():
+    global _var_suites
+    if not _var_suites:
+        _var_suites = _mongo().test_runner.suites
+    return _var_suites
+
+def _suite_runs():
+    global _var_suite_runs
+    if not _var_suite_runs:
+        _var_suite_runs = _mongo().test_runner.suite_runs
+    return _var_suite_runs
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -68,27 +87,28 @@ def _apply_patches(collection, patches):
             { '$set': patch_copy.source() }
         )
 
+
 async def get_suite(id):
-    return StoreObject( **_suites.find_one({'_id': ObjectId(id) }) )
+    return StoreObject( **_suites().find_one({'_id': ObjectId(id) }) )
 
 async def get_all_suites():
-    return StoreList(_suites.find())
+    return StoreList(_suites().find())
 
 async def save_suite(suite):
     assert isinstance(suite, StoreObject)
-    suite._id = _suites.insert_one(suite.source()).inserted_id
+    suite._id = _suites().insert_one(suite.source()).inserted_id
     return suite
 
 async def update_suites(patches):
-    _apply_patches(_suites, patches)
+    _apply_patches(_suites(), patches)
 
 async def get_all_suite_runs():
-    return StoreList(_suite_runs.find())
+    return StoreList(_suite_runs().find())
 
 async def save_suite_run(suite_run):
     assert isinstance(suite_run, StoreObject)
-    suite_run._id = _suite_runs.insert_one(suite_run.source()).inserted_id
+    suite_run._id = _suite_runs().insert_one(suite_run.source()).inserted_id
     return suite_run
 
 async def update_suite_runs(patches):
-    _apply_patches(_suite_runs, patches)
+    _apply_patches(_suite_runs(), patches)

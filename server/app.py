@@ -72,4 +72,7 @@ async def run_suite(request):
     await test_runner.schedule_test(suite_run._id, suite.command)
     return format_json_response(request, suite_run)
 
-app.run(debug=config.debug, host=config.host, port=config.port)
+if __name__ == '__main__':
+    app.run(debug=config.debug, host=config.rest_server_host,
+                                port=config.rest_server_port)
+
