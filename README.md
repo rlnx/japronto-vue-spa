@@ -1,6 +1,6 @@
 # [Vue.js](vuejs) SPA & [Japronto](japronto) REST server example*
-SPA -- single page web application <br/>
-REST -- representative state transfer
+SPA &mdash; single page web application <br/>
+REST &mdash; representative state transfer
 
 ## Getting started
 Make sure the following software is installed and is in the PATH.
