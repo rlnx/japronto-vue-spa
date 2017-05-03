@@ -17,6 +17,7 @@
     "vue-server-renderer": "^2.1.10"
   },
   "devDependencies": {
+    "coffee-script": "^1.12.5",
     "coffee-loader": "^0.7.3",
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
