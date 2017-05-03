@@ -2,6 +2,10 @@
   "name": "japronto-web-app",
   "description": "Example of Japronto based backend & Vue frontend",
   "author": "Ruslan Israfilov <ri.public@outlook.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RuslanIsrafilov/japronto-vue-spa.git"
+  },
   "scripts": {
     "watch": "cross-env NODE_ENV=development webpack --watch",
     "build": "cross-env NODE_ENV=production  webpack --progress --hide-modules",
@@ -35,5 +39,6 @@
     "vuetify": "^0.10.4",
     "webpack": "^2.2.1",
     "jquery": "^3.2.1"
-  }
+  },
+  "license": "MIT"
 }
