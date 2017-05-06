@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload>
+
+	<task>
+		<call function="run_python_test">
+			<arg name="test_file_path">?PACKAGE_PATH + "\\DataImportWizard\\delimited_text_import.py"</arg>
+			<arg name="test_file_config">?CONFIG_PATH + "\\DataImportWizard\\delimited_text_import.ini"</arg>
+			<arg name="log_file_path">?LOCAL_RESULTS + "\\delimited_text_import"</arg>
+			<arg name="timeout">"500"</arg>
+		</call>
+	</task>
+
+	<!--task>
+		<call function="run_python_test">
+			<arg name="test_file_path">?PACKAGE_PATH + "\\DataImportWizard\\randall1_coded_all_models.py"</arg>
+			<arg name="test_file_config">?CONFIG_PATH + "\\DataImportWizard\\randall1_coded_all_models.ini"</arg>
+			<arg name="log_file_path">?LOCAL_RESULTS + "\\randall1_coded_all_models"</arg>
+			<arg name="timeout">"300"</arg>
+		</call>
+	</task-->
+
+</workload>

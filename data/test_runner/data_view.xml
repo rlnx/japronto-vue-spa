@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload>
+
+    <task name="data_view_grid_TREE">
+        <call function="run_python_test">
+            <arg name="test_file_path">?PACKAGE_PATH + "\\DataView\\data_view_grid.py"</arg>
+            <arg name="log_file_path">?LOCAL_RESULTS + "\\data_view_grid_TREE"</arg>
+            <arg name="timeout">"300"</arg>
+            <arg name="model">"TREE"</arg>
+            <arg name="env_format">".idt"</arg>
+        </call>
+    </task>
+
+    <task name="data_view_grid_RF">
+        <call function="run_python_test">
+            <arg name="test_file_path">?PACKAGE_PATH + "\\DataView\\data_view_grid.py"</arg>
+            <arg name="log_file_path">?LOCAL_RESULTS + "\\data_view_grid_RF"</arg>
+            <arg name="timeout">"300"</arg>
+            <arg name="model">"RF"</arg>
+            <arg name="env_format">".ide"</arg>
+        </call>
+    </task>
+
+    <task name="data_view_grid_GBT">
+        <call function="run_python_test">
+            <arg name="test_file_path">?PACKAGE_PATH + "\\DataView\\data_view_grid.py"</arg>
+            <arg name="log_file_path">?LOCAL_RESULTS + "\\data_view_grid_GBT"</arg>
+            <arg name="timeout">"300"</arg>
+            <arg name="model">"GBT"</arg>
+            <arg name="env_format">".ide"</arg>
+        </call>
+    </task>
+
+    <task name="data_view_grid_REGR">
+        <call function="run_python_test">
+            <arg name="test_file_path">?PACKAGE_PATH + "\\DataView\\data_view_grid.py"</arg>
+            <arg name="log_file_path">?LOCAL_RESULTS + "\\data_view_grid_REGR"</arg>
+            <arg name="timeout">"300"</arg>
+            <arg name="model">"REGR"</arg>
+            <arg name="env_format">".ide"</arg>
+        </call>
+    </task>
+
+    <task>
+        <call function="run_python_test">
+            <arg name="test_file_path">?PACKAGE_PATH + "\\DataView\\adding-deleting_variables.py"</arg>
+            <arg name="log_file_path">?LOCAL_RESULTS + "\\adding-deleting_variables"</arg>
+            <arg name="timeout">"300"</arg>
+        </call>
+    </task>
+
+</workload>
